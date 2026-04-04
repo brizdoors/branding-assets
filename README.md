@@ -2,6 +2,9 @@
 
 Briz Doors branding assets published via GitHub Pages.
 
-- Site index: `/docs/index.html`
-- SVG usage guide: `/docs/usage.html`
-- Asset folder: `/docs/branding/`
+- `icon-only-dark/`
+- `icon-only-light/`
+- `text-only-dark/`
+- `text-only-light/`
+- `primary-dark/`
+- `primary-light/`
