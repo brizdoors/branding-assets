@@ -1,6 +1,6 @@
 # branding-assets
 
-Briz Doors branding assets published via GitHub Pages.
+Briz Doors + Screens branding assets published via GitHub Pages.
 
 - `icon-only-dark/`
 - `icon-only-light/`
@@ -8,3 +8,5 @@ Briz Doors branding assets published via GitHub Pages.
 - `text-only-light/`
 - `primary-dark/`
 - `primary-light/`
+- `email-singatures/`
+-
