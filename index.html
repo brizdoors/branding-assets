@@ -77,11 +77,6 @@
   .name{font-weight:700;font-size:15px}
   .sub{color:var(--muted);font-size:12.5px}
 
-  .toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-  .toggle button{border:0;background:#fff;color:var(--muted);font:600 11.5px/1 inherit;
-    padding:6px 10px;cursor:pointer}
-  .toggle button.on{background:var(--ink);color:#fff}
-
   .dl-svg{display:inline-flex;align-items:center;gap:7px;width:100%;justify-content:center;
     background:var(--green);color:#08220f;font-weight:700;font-size:14px;text-decoration:none;
     padding:10px 12px;border-radius:10px;margin-bottom:10px}
@@ -138,23 +133,14 @@ const PREVIEW_SIZE = 512;     // size used for the in-card preview (vector)
 
 // variant: 'light' = dark ink (show on light bg), 'dark' = light ink (show on dark bg)
 const GROUPS = [
-  {id:'primary',   name:'Primary',  blurb:'Icon + wordmark lockup', withBg:true},
-  {id:'icon',      name:'Icon',     blurb:'Standalone mark',        withBg:true},
-  {id:'text-only', name:'Text only',blurb:'Wordmark, no icon',      withBg:true},
-  {id:'brizit',    name:'Brizit',   blurb:'Wordmark variant',       withBg:false},
+  {id:'primary',   name:'Primary',  blurb:'Icon + wordmark lockup'},
+  {id:'icon',      name:'Icon',     blurb:'Standalone mark'},
+  {id:'text-only', name:'Text only',blurb:'Wordmark, no icon'},
+  {id:'brizit',    name:'Brizit',   blurb:'Wordmark variant'},
 ];
 
-function paths(group, variant, withBg){
+function paths(group, variant){
   const base = group + '-' + variant;
-  if(withBg){
-    const dir = base + '/with-bg/';
-    const suf = '-with-bg';
-    return {
-      preview: dir + base + '-' + PREVIEW_SIZE + suf + '.svg',
-      svg:     dir + base + '-' + SVG_SIZE + suf + '.svg',
-      png: s => dir + base + '-' + s + suf + '.png',
-    };
-  }
   const dir = base + '/';
   return {
     preview: dir + base + '-' + PREVIEW_SIZE + '.svg',
@@ -171,16 +157,14 @@ function sizeChips(p){
 
 function card(group, variant){
   const onLight = variant === 'light';                 // dark-ink art -> light backdrop
-  const trans = paths(group.id, variant, false);
-  const wb    = group.withBg ? paths(group.id, variant, true) : null;
-  const transClass = onLight ? 'light' : 'dark';
-  const wbClass    = onLight ? 'solid-light' : 'solid-dark';
+  const p = paths(group.id, variant);
+  const previewClass = onLight ? 'light' : 'dark';
 
   const el = document.createElement('div');
   el.className = 'card';
   el.innerHTML = `
-    <div class="preview ${transClass}" data-trans-class="${transClass}" data-wb-class="${wbClass}">
-      <img src="${trans.preview}" alt="${group.name} ${variant}" loading="lazy">
+    <div class="preview ${previewClass}">
+      <img src="${p.preview}" alt="${group.name} ${variant}" loading="lazy">
     </div>
     <div class="body">
       <div class="row1">
@@ -188,31 +172,10 @@ function card(group, variant){
           <div class="name">${group.name} · ${variant}</div>
           <div class="sub">${onLight ? 'For light backgrounds' : 'For dark backgrounds'}</div>
         </div>
-        ${group.withBg ? `<div class="toggle">
-            <button class="on" data-bg="0">Transparent</button>
-            <button data-bg="1">Backdrop</button>
-          </div>` : ``}
       </div>
-      <a class="dl-svg" href="${trans.svg}" download>${dlIcon} Download SVG</a>
-      <div class="sizes"><span class="lbl">PNG sizes (px)</span>${sizeChips(trans)}</div>
+      <a class="dl-svg" href="${p.svg}" download>${dlIcon} Download SVG</a>
+      <div class="sizes"><span class="lbl">PNG sizes (px)</span>${sizeChips(p)}</div>
     </div>`;
-
-  if(group.withBg){
-    const img   = el.querySelector('.preview img');
-    const pv     = el.querySelector('.preview');
-    const svgBtn = el.querySelector('.dl-svg');
-    const sizes  = el.querySelector('.sizes');
-    const btns   = el.querySelectorAll('.toggle button');
-    const apply = bg => {
-      const p = bg ? wb : trans;
-      img.src = p.preview;
-      svgBtn.setAttribute('href', p.svg);
-      sizes.innerHTML = `<span class="lbl">PNG sizes (px)</span>${sizeChips(p)}`;
-      pv.className = 'preview ' + (bg ? wbClass : transClass);
-      btns.forEach(b => b.classList.toggle('on', (+b.dataset.bg) === bg));
-    };
-    btns.forEach(b => b.addEventListener('click', () => apply(+b.dataset.bg)));
-  }
   return el;
 }
 

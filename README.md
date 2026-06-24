@@ -17,7 +17,6 @@ Every logo is available as a scalable **SVG** and as **PNG** at sizes
 - `favicon.ico`, `icon-dark/apple-icon*.svg` — favicon and app icons
 
 `-light` variants are dark-ink (for light backgrounds); `-dark` variants are
-light-ink (for dark backgrounds). Categories with a `with-bg/` subfolder also
-include versions on a solid brand background.
+light-ink (for dark backgrounds).
 
 > `-light` / `-dark` refers to the **background the asset is designed for**.
